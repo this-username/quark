@@ -1109,8 +1109,9 @@ int64 static GetBlockValue(int nHeight, int64 nFees, unsigned int nBits)
     
     int64 nSubsidy = nBlockRewardStartCoin;
 
-    int exponent=(nHeight / 4068);
-    for(int i=0;i<exponent;i++){
+    int exponent=(nHeight / 4072);
+    for(int i=0;i<exponent;i++)
+    {
         nSubsidy=nSubsidy/25;
         nSubsidy=nSubsidy*24;
     }
@@ -1123,6 +1124,22 @@ int64 static GetBlockValue(int nHeight, int64 nFees, unsigned int nBits)
     return nSubsidy + nFees;
 }
 
+int64 static GetPTSBlockValue(int nHeight, int64 nFees, int64 BitShares, unsigned int nBlocks, bool BitShare)
+{   
+
+    if(BitShare)
+    {
+        int64 nSubsidy = 12 * BitShares * COIN;
+    }
+    else
+    {
+        int64 nSubsidy = nBlockRewardMinimumCoin;
+        nSubsidy >>= (nHeight / 60480);
+        nSubsidy *= nBlocks;
+    }
+    
+    return nSubsidy + nFees;
+}
 //
 // minimum amount of work that could possibly be required nTime after
 // minimum work required was nBase

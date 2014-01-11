@@ -28,7 +28,7 @@ struct CBlockIndexWorkComparator;
 /** The maximum allowed size for a serialized block, in bytes (network rule) */
 static const unsigned int MAX_BLOCK_SIZE = 800000;
 /** The maximum transaction comment size */
-static const unsigned int MAX_TX_COMMENT_LEN = 16; 
+static const unsigned int MAX_TX_COMMENT_LEN = 56; 
 /** The maximum size for mined blocks */
 static const unsigned int MAX_BLOCK_SIZE_GEN = 500000;
 /** The maximum size for transactions we're willing to relay/mine */
