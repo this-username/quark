@@ -36,7 +36,7 @@ unsigned int nTransactionsUpdated = 0;
 map<uint256, CBlockIndex*> mapBlockIndex;
 uint256 hashGenesisBlock("0x00000c257b93a36e9a4318a64398d661866341331a984e2b486414fc5bb16ccd");
 static const unsigned int timeGenesisBlock = 1374408079;
-static CBigNum bnProofOfWorkLimit(~uint256(0) >> 20);
+static CBigNum bnProofOfWorkLimit(~uint256(0) >> 22);
 CBlockIndex* pindexGenesisBlock = NULL;
 int nBestHeight = -1;
 uint256 nBestChainWork = 0;
@@ -1092,13 +1092,13 @@ uint256 static GetOrphanRoot(const CBlockHeader* pblock)
     return pblock->GetHash();
 }
 
-static const int64 nGenesisBlockRewardCoin = 1 * COIN;
-static const int64 nBlockRewardStartCoin = 2048 * COIN;
-static const int64 nBlockRewardMinimumCoin = 1 * COIN;
+static const int64 nGenesisBlockRewardCoin = 50 * COIN;
+static const int64 nBlockRewardStartCoin = 720 * COIN;
+static const int64 nBlockRewardMinimumCoin = 0.02 * COIN;
 
-static const int64 nTargetTimespan = 10 * 60; // 10 minutes
-static const int64 nTargetSpacing = 30; // 30 seconds
-static const int64 nInterval = nTargetTimespan / nTargetSpacing; // 20 blocks
+static const int64 nTargetTimespan = 800; 
+static const int64 nTargetSpacing = 200; 
+static const int64 nInterval = nTargetTimespan / nTargetSpacing;
 
 int64 static GetBlockValue(int nHeight, int64 nFees, unsigned int nBits)
 {
@@ -1109,10 +1109,12 @@ int64 static GetBlockValue(int nHeight, int64 nFees, unsigned int nBits)
     
     int64 nSubsidy = nBlockRewardStartCoin;
 
-    // Subsidy is cut in half every 60480 blocks (21 days)
-    nSubsidy >>= (nHeight / 60480);
+    int exponent=(nHeight / 4068);
+    for(int i=0;i<exponent;i++){
+        nSubsidy=nSubsidy/25;
+        nSubsidy=nSubsidy*24;
+    }
     
-    // Minimum subsidy
     if (nSubsidy < nBlockRewardMinimumCoin)
     {
         nSubsidy = nBlockRewardMinimumCoin;
@@ -3161,7 +3163,7 @@ bool static AlreadyHave(const CInv& inv)
 // The message start string is designed to be unlikely to occur in normal data.
 // The characters are rarely used upper ASCII, not valid as UTF-8, and produce
 // a large 4-byte int at any alignment.
-unsigned char pchMessageStart[4] = { 0xfe, 0xa5, 0x03, 0xdd };
+unsigned char pchMessageStart[4] = { 0xf6, 0xbf, 0x27, 0xdc };
 
 void static ProcessGetData(CNode* pfrom)
 {
